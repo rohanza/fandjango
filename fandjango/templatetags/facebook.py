@@ -14,14 +14,17 @@ class FacebookNode(template.Node):
         try:
             app_id = settings.FACEBOOK_APPLICATION_ID
         except AttributeError:
-            raise template.TemplateSyntaxError, "%r tag requires FACEBOOK_APP_ID to be configured." \
-                % token.contents.split()[0]
+            raise template.TemplateSyntaxError, "facebook tag requires FACEBOOK_APP_ID to be configured."
         self.app_id   = app_id
         self.nodelist = nodelist
 
     def render(self, context):
         t = template.loader.get_template('fandjango/facebook_init.html')
         code = self.nodelist.render(context)
+
+        # strip script tags
+        code = code.replace('<script>', '').replace('</script>', '')
+
         custom_context = context
         custom_context['code'] = code
         custom_context['app_id'] = self.app_id

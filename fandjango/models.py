@@ -1,4 +1,3 @@
-from httplib import HTTPConnection
 from datetime import datetime, timedelta
 from urlparse import parse_qs
 
@@ -12,6 +11,7 @@ from facepy import GraphAPI
 
 import requests
 
+
 class Facebook:
     """
     Facebook instances hold information on the current user and
@@ -24,13 +24,14 @@ class Facebook:
     signed_request = None
     """A ``SignedRequest`` instance."""
 
+
 class User(models.Model):
     """
     Instances of the User class represent Facebook users who
     have authorized the application.
     """
 
-    facebook_id = models.BigIntegerField(_('facebook id'), unique=True)
+    facebook_id = models.BigIntegerField(_('facebook id'), unique=True, primary_key=True)
     """An integer describing the user's Facebook ID."""
 
     facebook_username = models.CharField(_('facebook username'), max_length=255, blank=True, null=True)
@@ -51,7 +52,7 @@ class User(models.Model):
     authorized = models.BooleanField(_('authorized'), default=True)
     """A boolean describing whether the user has currently authorized the application."""
 
-    oauth_token = models.OneToOneField('OAuthToken', verbose_name=_('OAuth token'))
+    oauth_token = models.OneToOneField('OAuthToken', verbose_name=_('OAuth token'), blank=True, null=True)
     """An ``OAuthToken`` object."""
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
